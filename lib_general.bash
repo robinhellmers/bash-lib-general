@@ -40,3 +40,31 @@ init_lib
 #####################
 ### Library start ###
 #####################
+
+###
+# List of functions for usage outside of lib
+#
+# - find_kernel()
+###
+
+
+register_help_text 'find_kernel' \
+"find_kernel
+
+Finds which kernel that is used. Native linux or
+Windows Subsystem for Linux (WSL).
+
+Output variables:
+* found_kernel:
+    - 'native' if native Linux
+    - 'wsl' if Windows Subsystem for Linux (WSL)"
+
+register_function_flags 'find_kernel'
+
+find_kernel()
+{
+    _handle_args 'find_kernel' "$@"
+
+    found_kernel='native'
+    uname -r | grep -qEi "microsoft|wsl" && found_kernel='wsl'
+}
