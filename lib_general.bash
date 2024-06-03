@@ -46,6 +46,7 @@ init_lib
 #
 # - find_kernel()
 # - find_os()
+# - unhandled_return_code()
 ###
 
 
@@ -97,4 +98,27 @@ find_os()
     . /etc/os-release
 
     found_os="$ID"
+}
+
+register_help_text 'unhandled_return_code' \
+"unhandled_return_code
+
+Outputs error about unhandled '\$return_code'
+
+Example:
+    case \"\$return_code\" in
+        0) ;;
+        1) ;;
+        *)
+            unhandled_return_code
+            ;;
+    esac
+"
+
+register_function_flags 'unhandled_return_code'
+
+unhandled_return_code()
+{
+    echo_error "Unhandled return code. Check return code: '$return_code'"
+    return 0
 }
