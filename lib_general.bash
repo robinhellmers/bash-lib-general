@@ -45,6 +45,7 @@ init_lib
 # List of functions for usage outside of lib
 #
 # - find_kernel()
+# - find_os()
 ###
 
 
@@ -67,4 +68,33 @@ find_kernel()
 
     found_kernel='native'
     uname -r | grep -qEi "microsoft|wsl" && found_kernel='wsl'
+}
+
+register_help_text 'find_os' \
+"find_os
+
+Finds which operating system that is used.
+
+Output variables:
+* found_os:
+    Example:
+    - 'debian' if Debian
+    - 'ubuntu' if Ubuntu"
+
+register_function_flags 'find_os'
+
+find_os()
+{
+    _handle_args 'find_os' "$@"
+
+    if ! [[ -f /etc/os-release ]]
+    then
+        echo "Found no OS information."
+        exit 1
+    fi
+
+    # $ID stores information e.g. ubuntu/debian/
+    . /etc/os-release
+
+    found_os="$ID"
 }
